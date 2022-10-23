@@ -8,37 +8,27 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import util.EnteroCadena;
+import util.ejercicio1.EnteroCadena;
 
 public class Ejercicio1 {
-
-	public record Linea(Integer varA, String varB, Integer varC, String varD, Integer varE) {
-	}
 	
-	public static Map<Integer, List<String>> funcional(Linea linea) {
-		return funcional(linea.varA(), linea.varB(), linea.varC(), linea.varD(), linea.varE());
-	}
+	private final UnaryOperator<EnteroCadena> NEXT = elem -> EnteroCadena.of(
+			elem.a()+2, 
+			elem.a()%3==0 
+					? elem.s() + elem.a().toString() 
+					: elem.s().substring(elem.a() % elem.s().length())
+	);
 
-	public static Map<Integer, List<String>> funcional(Integer varA, String varB, Integer varC, String varD, Integer varE) {
-		UnaryOperator<EnteroCadena> nx = elem -> EnteroCadena.of(
-				elem.a()+2, 
-				elem.a()%3==0 
-						? elem.s() + elem.a().toString() 
-						: elem.s().substring(elem.a() % elem.s().length())
-		);
-
-		return Stream.iterate(EnteroCadena.of(varA,varB), elem -> elem.a() < varC, nx)
+	public Map<Integer, List<String>> funcional(Integer varA, String varB, Integer varC, String varD, Integer varE) {
+		return Stream.iterate(EnteroCadena.of(varA,varB), elem -> elem.a() < varC, NEXT)
 				.map(elem -> elem.s() + varD)
 				.filter(nom -> nom.length() < varE)
 				.collect(Collectors.groupingBy(String::length));
 	}
 	
-	public static Map<Integer, List<String>> iterativa(Linea linea) {
-		return iterativa(linea.varA(), linea.varB(), linea.varC(), linea.varD(), linea.varE());
-	}
-	
-	public static Map<Integer, List<String>> iterativa(Integer varA, String varB, Integer varC, String varD, Integer varE) {
+	public Map<Integer, List<String>> iterativa(Integer varA, String varB, Integer varC, String varD, Integer varE) {
 		Map<Integer, List<String>> map = new HashMap<>();
+		// obtenemos el primer elemento de la iteración
 		EnteroCadena elem = EnteroCadena.of(varA, varB);
 		
 		while(elem.a() < varC) {
@@ -46,47 +36,36 @@ public class Ejercicio1 {
 			int length = nom.length();
 			
 			if (length < varE)
+				// añadimos a map, si no existe, una nueva ArrayList a la clave length y, a esa lista (o la ya existente),
+				// añadimos nom
 				map.computeIfAbsent(length, l -> new ArrayList<>()).add(nom);
 			
-			elem = EnteroCadena.of(
-					elem.a()+2, 
-					elem.a()%3==0 
-							? elem.s() + elem.a().toString() 
-							: elem.s().substring(elem.a()%elem.s().length())
-			);
+			// preparamos elem para la siguiente iteración
+			elem = NEXT.apply(elem);
 		}
 		
 		return map;
 	}
 	
-	public static Map<Integer, List<String>> recursivaFinal(Linea linea) {
-		return recursivaFinal(linea.varA(), linea.varB(), linea.varC(), linea.varD(), linea.varE());
+	public Map<Integer, List<String>> recursivaFinal(Integer varA, String varB, Integer varC, String varD, Integer varE) {
+		EnteroCadena enteroCadena = EnteroCadena.of(varA, varB); // obtenemos el primer elemento de la iteración
+		return recursivaFinal(new HashMap<>(), enteroCadena, varC, varD, varE);
 	}
 	
-	public static Map<Integer, List<String>> recursivaFinal(Integer varA, String varB, Integer varC, String varD, Integer varE) {
-		return ejercicioC(new HashMap<>(), EnteroCadena.of(varA, varB), varC, varD, varE);
-	}
-	
-	public static Map<Integer, List<String>> ejercicioC(Map<Integer, List<String>> map, EnteroCadena elem, Integer varC, String varD, Integer varE) {
+	public Map<Integer, List<String>> recursivaFinal(Map<Integer, List<String>> map, EnteroCadena elem, Integer varC, String varD, Integer varE) {
+		// si se cumple la condición que termina el algoritmo, devolvemos el mapa que hemos estado rellenando
 		if (elem.a() >= varC)
 			return map;
 
 		String nom = elem.s() + varD;
 		int length = nom.length();
 		
-		if (length < varE) {
-			if (!map.containsKey(length))
-				map.put(length, new ArrayList<>());
-			
-			map.get(length).add(nom);
-		}
-		
-		elem = EnteroCadena.of(
-				elem.a()+2, 
-				elem.a()%3==0 
-						? elem.s() + elem.a().toString() 
-						: elem.s().substring(elem.a()%elem.s().length())
-		);
-		return ejercicioC(map, elem, varC, varD, varE);
+		if (length < varE)
+			// añadimos a map, si no existe, una nueva ArrayList a la clave length y, a esa lista (o la ya existente),
+			// añadimos nom
+			map.computeIfAbsent(length, l -> new ArrayList<>()).add(nom);
+
+		elem = NEXT.apply(elem); // preparamos elem para la siguiente iteración
+		return recursivaFinal(map, elem, varC, varD, varE); // devolvemos lo que retorne la siguiente iteración
 	}
 }
