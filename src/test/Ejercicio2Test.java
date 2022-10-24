@@ -33,6 +33,9 @@ public class Ejercicio2Test extends ParseableFileTest<Linea> {
 
 		printRecursivaFinal();
 		this.test(lineas, ejercicio2::recursivaFinal);
+
+		printFuncional();
+		this.test(lineas, ejercicio2::funcional);
 	}
 
 	private void test(List<Linea> lineas, TriFunction<Integer, Integer, String, Integer> function) {
