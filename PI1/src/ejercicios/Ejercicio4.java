@@ -24,10 +24,12 @@ public class Ejercicio4 {
 		return recursivaConMemoria(new HashMap<>(), a, b, c);
 	}
 
-	public String recursivaConMemoria(Map<Tupla, String> memoria, int a, int b, int c) {
+	public String recursivaConMemoria(Map<Tupla, String> cache, int a, int b, int c) {
 		Tupla tupla = new Tupla(a, b, c);
-		if (memoria.containsKey(tupla))
-			return memoria.get(tupla);
+		
+		// si ya la hemos calculado, la obtenemos de la caché
+		if (cache.containsKey(tupla))
+			return cache.get(tupla);
 
 		String s;
 
@@ -38,36 +40,40 @@ public class Ejercicio4 {
 			s = "(" + Integer.toString(c) + "-" + Integer.toString(b) + "-" + Integer.toString(a) + ")";
 
 		else if (b % a == 0 && (a % 2 == 0 || b % 3 == 0))
-			s = "(" + recursivaConMemoria(memoria, a - 1, b / a, c - 1) + "*" + recursivaConMemoria(memoria, a - 2, b / 2, c / 2) + ")";
+			s = "(" + recursivaConMemoria(cache, a - 1, b / a, c - 1) + "*" + recursivaConMemoria(cache, a - 2, b / 2, c / 2) + ")";
 
 		else 
-			s = "(" + recursivaConMemoria(memoria, a / 2, b - 2, c / 2) + "/" + recursivaConMemoria(memoria, a / 3, b - 1, c / 3) + ")";
+			s = "(" + recursivaConMemoria(cache, a / 2, b - 2, c / 2) + "/" + recursivaConMemoria(cache, a / 3, b - 1, c / 3) + ")";
 
-		memoria.put(tupla, s);
+		// guardamos lo calculado en el caché
+		cache.put(tupla, s);
 		return s;
 	}
 
 	public String iterativa(int a, int b, int c) {
-		Map<Tupla, String> memoria = new HashMap<>();
+		Map<Tupla, String> map = new HashMap<>();
 
 		String r = null;
-
+		
+		// iteramos tres variables desde 0 hasta los valores pasados como argumento para rellenar el mapa
+		// en este caso, lo rellenamos ascendentemente, para usar en los valores superiores lo que ya hemos
+		// rellenado.
 		for (int i = 0; i <= a; i++)
 			for (int j = 0; j <= b; j++)
-				for (int v = 0; v <= c; v++) {
-					if (i < 2 && j <= 2 || v < 2)
-						r = "(" + Integer.toString(i) + "+" + Integer.toString(j) + "+" + Integer.toString(v) + ")";
+				for (int k = 0; k <= c; k++) {
+					if (i < 2 && j <= 2 || k < 2)
+						r = "(" + Integer.toString(i) + "+" + Integer.toString(j) + "+" + Integer.toString(k) + ")";
 
-					else if (i < 3 || j < 3 && v <= 3)
-						r = "(" + Integer.toString(v) + "-" + Integer.toString(j) + "-" + Integer.toString(i) + ")";
+					else if (i < 3 || j < 3 && k <= 3)
+						r = "(" + Integer.toString(k) + "-" + Integer.toString(j) + "-" + Integer.toString(i) + ")";
 
 					else if (j % i == 0 && (i % 2 == 0 || j % 3 == 0))
-						r = "(" + memoria.get(new Tupla(i - 1, j / i, v - 1)) + "*" + memoria.get(new Tupla(i - 2, j / 2, v / 2)) + ")";
+						r = "(" + map.get(new Tupla(i - 1, j / i, k - 1)) + "*" + map.get(new Tupla(i - 2, j / 2, k / 2)) + ")";
 
 					else
-						r = "(" + memoria.get(new Tupla(i / 2, j - 2, v / 2)) + "/" + memoria.get(new Tupla(i / 3, j - 1, v / 3)) + ")";
+						r = "(" + map.get(new Tupla(i / 2, j - 2, k / 2)) + "/" + map.get(new Tupla(i / 3, j - 1, k / 3)) + ")";
 
-					memoria.put(new Tupla(i, j, v), r);
+					map.put(new Tupla(i, j, k), r);
 				}
 
 		return r;
