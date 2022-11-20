@@ -27,22 +27,22 @@ public class TestEjercicio1 extends Test {
 	}
 
 	private void generateBenchmarks() {
-		this.generateBenchmark(size -> Ejercicio1.recursivaBigInteger(size), RECURSIVA_BIG_INTEGER);
-		this.generateBenchmark(size -> Ejercicio1.iterativaBigInteger(size), ITERATIVA_BIG_INTEGER);
-		this.generateBenchmark(size -> Ejercicio1.recursivaDouble(size), RECURSIVA_DOUBLE);
-		this.generateBenchmark(size -> Ejercicio1.iterativaDouble(size), ITERATIVA_DOUBLE);
+		this.generateBenchmark(size -> Ejercicio1.recursivaBigInteger(size), RECURSIVA_BIG_INTEGER, 1000, 50);
+		this.generateBenchmark(size -> Ejercicio1.iterativaBigInteger(size), ITERATIVA_BIG_INTEGER, 1000, 50);
+		this.generateBenchmark(size -> Ejercicio1.recursivaDouble(size), RECURSIVA_DOUBLE, 10000, 10000);
+		this.generateBenchmark(size -> Ejercicio1.iterativaDouble(size), ITERATIVA_DOUBLE, 10000, 10000);
 	}
 
 	private void generateGraphs() {
 		this.generateGraph(RECURSIVA_BIG_INTEGER, TipoAjuste.POLYNOMIALLOG);
 		this.generateGraph(ITERATIVA_BIG_INTEGER, TipoAjuste.POLYNOMIALLOG);
-		this.generateGraph(RECURSIVA_DOUBLE, TipoAjuste.POLYNOMIALLOG);
-		this.generateGraph(ITERATIVA_DOUBLE, TipoAjuste.POLYNOMIALLOG);
+		this.generateGraph(RECURSIVA_DOUBLE, TipoAjuste.LINEAL);
+		this.generateGraph(ITERATIVA_DOUBLE, TipoAjuste.LINEAL);
 		this.generateCombinedGraph();
 	}
 
-	private void generateBenchmark(Consumer<Integer> implementation, String fileName) {
-		Benchmark benchmark = new Benchmark(implementation, 2, 5000, 333, 50, 1000);
+	private void generateBenchmark(Consumer<Integer> implementation, String fileName, int warmupIterations, int iterations) {
+		Benchmark benchmark = new Benchmark(implementation, 2, 5000, 333, warmupIterations, iterations);
 		benchmark.run();
 
 		try {
