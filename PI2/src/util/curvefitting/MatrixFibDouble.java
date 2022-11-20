@@ -1,4 +1,4 @@
-package util;
+package util.curvefitting;
 
 import java.math.BigInteger;
 

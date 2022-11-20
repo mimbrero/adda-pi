@@ -15,11 +15,11 @@ import us.lsi.common.Files2;
 import us.lsi.common.List2;
 import us.lsi.common.Pair;
 import us.lsi.curvefitting.DataCurveFitting;
-import util.FicherosListas;
-import util.GraficosAjuste;
-import util.Resultados;
-import util.TipoAjuste;
-import util.FicherosListas.PropiedadesListas;
+import util.curvefitting.FicherosListas;
+import util.curvefitting.GraficosAjuste;
+import util.curvefitting.Resultados;
+import util.curvefitting.TipoAjuste;
+import util.curvefitting.FicherosListas.PropiedadesListas;
 
 public class TestEjemplo3 {
 	
