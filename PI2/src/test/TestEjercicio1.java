@@ -2,6 +2,7 @@ package test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Consumer;
 
 import ejercicios.Ejercicio1;
@@ -12,12 +13,12 @@ import util.test.Test;
 
 public class TestEjercicio1 extends Test {
 
-	private static final String PATH_FORMAT = "ficheros/TiemposFactorial%s.csv";
+	private static final String PATH_FORMAT = "ficheros/tiempos-factorial-%s.csv";
 
-	private static final String RECURSIVA_BIG_INTEGER = "Recursiva_BigInteger";
-	private static final String ITERATIVA_BIG_INTEGER = "Iterativa_BigInteger";
-	private static final String RECURSIVA_DOUBLE = "Recursiva_Double";
-	private static final String ITERATIVA_DOUBLE = "Iterativa_Double";
+	private static final String RECURSIVA_BIG_INTEGER = "recursiva-biginteger";
+	private static final String ITERATIVA_BIG_INTEGER = "iterativa-biginteger";
+	private static final String RECURSIVA_DOUBLE = "recursiva-double";
+	private static final String ITERATIVA_DOUBLE = "iterativa-double";
 
 	@Override
 	public void test() {
@@ -26,10 +27,10 @@ public class TestEjercicio1 extends Test {
 	}
 
 	private void generateBenchmarks() {
-		this.generateBenchmark(t -> Ejercicio1.recursivaBigInteger(t), RECURSIVA_BIG_INTEGER);
-		this.generateBenchmark(t -> Ejercicio1.iterativaBigInteger(t), ITERATIVA_BIG_INTEGER);
-		this.generateBenchmark(t -> Ejercicio1.recursivaDouble(t), RECURSIVA_DOUBLE);
-		this.generateBenchmark(t -> Ejercicio1.iterativaDouble(t), ITERATIVA_DOUBLE);
+		this.generateBenchmark(size -> Ejercicio1.recursivaBigInteger(size), RECURSIVA_BIG_INTEGER);
+		this.generateBenchmark(size -> Ejercicio1.iterativaBigInteger(size), ITERATIVA_BIG_INTEGER);
+		this.generateBenchmark(size -> Ejercicio1.recursivaDouble(size), RECURSIVA_DOUBLE);
+		this.generateBenchmark(size -> Ejercicio1.iterativaDouble(size), ITERATIVA_DOUBLE);
 	}
 
 	private void generateGraphs() {
@@ -37,10 +38,11 @@ public class TestEjercicio1 extends Test {
 		this.generateGraph(ITERATIVA_BIG_INTEGER, TipoAjuste.POLYNOMIALLOG);
 		this.generateGraph(RECURSIVA_DOUBLE, TipoAjuste.POLYNOMIALLOG);
 		this.generateGraph(ITERATIVA_DOUBLE, TipoAjuste.POLYNOMIALLOG);
+		this.generateCombinedGraph();
 	}
 
 	private void generateBenchmark(Consumer<Integer> implementation, String fileName) {
-		Benchmark benchmark = new Benchmark(implementation, 2, 5000, 200, 50, 100);
+		Benchmark benchmark = new Benchmark(implementation, 2, 5000, 333, 50, 1000);
 		benchmark.run();
 
 		try {
@@ -52,6 +54,18 @@ public class TestEjercicio1 extends Test {
 
 	private void generateGraph(String fileName, TipoAjuste tipoAjuste) {
 		GraficosAjuste.show(PATH_FORMAT.formatted(fileName), tipoAjuste, fileName);
+	}
+
+	private void generateCombinedGraph() {
+		List<String> names = List.of(RECURSIVA_BIG_INTEGER, ITERATIVA_BIG_INTEGER, RECURSIVA_DOUBLE, ITERATIVA_DOUBLE);
+
+		GraficosAjuste.showCombined(
+				"Factorial", 
+				names.stream()
+					.map(fileName -> PATH_FORMAT.formatted(fileName))
+					.toList(),
+				names
+		);
 	}
 
 	public static void main(String[] args) {

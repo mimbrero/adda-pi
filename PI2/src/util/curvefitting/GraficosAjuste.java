@@ -151,7 +151,6 @@ public class GraficosAjuste {
 		plt.ylabel("tiempo");
 		try {
 			plt.show();
-			System.out.println(title);
 			plt.savefig("figuras/" + title + ".png");
 		} catch (IOException e) {
 			e.printStackTrace();
