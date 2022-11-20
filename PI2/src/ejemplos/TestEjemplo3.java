@@ -1,4 +1,4 @@
-package test;
+package ejemplos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +9,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-import ejemplos.Ejemplo3;
 import us.lsi.common.Files2;
 import us.lsi.common.List2;
 import us.lsi.common.Pair;

@@ -1,4 +1,4 @@
-package test;
+package ejemplos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import ejemplos.Ejemplo1;
 import us.lsi.common.Pair;
 import us.lsi.common.Trio;
 import us.lsi.curvefitting.DataCurveFitting;

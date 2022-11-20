@@ -1,4 +1,4 @@
-package test;
+package ejemplos;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-
-
-import ejemplos.Ejemplo2;
 import us.lsi.common.Pair;
 import us.lsi.common.Trio;
 import us.lsi.curvefitting.DataCurveFitting;
