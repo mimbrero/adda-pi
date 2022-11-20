@@ -1,4 +1,4 @@
-package util;
+package util.curvefitting;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,14 +11,14 @@ import org.apache.commons.math3.fitting.WeightedObservedPoint;
 /**
  * @author migueltoro
  *
- * Función de la forma a*b^n + c
+ * Función de la forma a*b^n
  */
-public class Exponential2 implements ParametricUnivariateFunction {
+public class Exponential2_0 implements ParametricUnivariateFunction {
 	
-	private static Exponential2 pl = null;
+	private static Exponential2_0 pl = null;
 	
-	public static Exponential2 of() {
-		if(pl == null) pl = new Exponential2();
+	public static Exponential2_0 of() {
+		if(pl == null) pl = new Exponential2_0();
 		return pl;
 	}
 
@@ -28,8 +28,7 @@ public class Exponential2 implements ParametricUnivariateFunction {
 		Double b = p[1];
 		Double a0 = Math.pow(b,n);
 		Double b0 = a*n*Math.pow(b,n-1);
-		Double c0 = 1.;
-		double[] r = {a0,b0,c0};
+		double[] r = {a0,b0};
 		return r;
 	}
 
@@ -37,12 +36,11 @@ public class Exponential2 implements ParametricUnivariateFunction {
 	public double value(double n, double... p) {
 		Double a = p[0];
 		Double b = p[1];
-		Double c = p[2];
-		return a*Math.pow(b,n) + c;
+		return a*Math.pow(b,n);
 	}
 	
 	public double[] fit(List<WeightedObservedPoint> points, double[] start) {
-		final SimpleCurveFitter fitter = SimpleCurveFitter.create(Exponential2.of(),start);
+		final SimpleCurveFitter fitter = SimpleCurveFitter.create(Exponential2_0.of(),start);
 		return fitter.fit(points);
 	}
 	

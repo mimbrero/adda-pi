@@ -1,155 +1,60 @@
 package test;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import ejercicios.Ejercicio1;
-import us.lsi.common.Pair;
-import us.lsi.common.Trio;
-import us.lsi.curvefitting.DataCurveFitting;
-import util.GraficosAjuste;
-import util.Resultados;
-import util.TipoAjuste;
+import util.benchmark.Benchmark;
+import util.curvefitting.GraficosAjuste;
+import util.curvefitting.TipoAjuste;
+import util.test.Test;
 
-public class TestEjercicio1 {
+public class TestEjercicio1 extends Test {
+
+	private static final String PATH_FORMAT = "ficheros/TiemposFactorial%s.csv";
+
+	private static final String RECURSIVA_BIG_INTEGER = "Recursiva_BigInteger";
+	private static final String ITERATIVA_BIG_INTEGER = "Iterativa_BigInteger";
+	private static final String RECURSIVA_DOUBLE = "Recursiva_Double";
+	private static final String ITERATIVA_DOUBLE = "Iterativa_Double";
+
+	@Override
+	public void test() {
+		this.generateBenchmarks();
+		this.generateGraphs();
+	}
+
+	private void generateBenchmarks() {
+		this.generateBenchmark(t -> Ejercicio1.recursivaBigInteger(t), RECURSIVA_BIG_INTEGER);
+		this.generateBenchmark(t -> Ejercicio1.iterativaBigInteger(t), ITERATIVA_BIG_INTEGER);
+		this.generateBenchmark(t -> Ejercicio1.recursivaDouble(t), RECURSIVA_DOUBLE);
+		this.generateBenchmark(t -> Ejercicio1.iterativaDouble(t), ITERATIVA_DOUBLE);
+	}
+
+	private void generateGraphs() {
+		this.generateGraph(RECURSIVA_BIG_INTEGER, TipoAjuste.POLYNOMIALLOG);
+		this.generateGraph(ITERATIVA_BIG_INTEGER, TipoAjuste.POLYNOMIALLOG);
+		this.generateGraph(RECURSIVA_DOUBLE, TipoAjuste.POLYNOMIALLOG);
+		this.generateGraph(ITERATIVA_DOUBLE, TipoAjuste.POLYNOMIALLOG);
+	}
+
+	private void generateBenchmark(Consumer<Integer> implementation, String fileName) {
+		Benchmark benchmark = new Benchmark(implementation, 2, 5000, 200, 50, 100);
+		benchmark.run();
+
+		try {
+			benchmark.writeResults(Path.of(PATH_FORMAT.formatted(fileName)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void generateGraph(String fileName, TipoAjuste tipoAjuste) {
+		GraficosAjuste.show(PATH_FORMAT.formatted(fileName), tipoAjuste, fileName);
+	}
 
 	public static void main(String[] args) {
-		generaFicherosTiempoEjecucion();
-		muestraGraficas();
-	}
-
-	private static Integer nMin = 2; // n mínimo
-	private static Integer nMax = 5000; // n máximo
-	private static Integer numSizes = 30; // número de problemas
-	private static Integer numMediciones = 10; //10; // número de mediciones de tiempo de cada caso (número de experimentos)
-	// para exponencial se puede reducir 
-	private static Integer numIter = 50; //50; // número de iteraciones para cada medición de tiempo
-	// para exponencial se puede reducir 
-	private static Integer numIterWarmup = 100; // número de iteraciones para warmup
-
-	// Trios de métodos a probar con su tipo de ajuste y etiqueta para el nombre de los ficheros
-	private static List<Trio<Function<Integer, Number>, TipoAjuste, String>> metodosBigInteger = List.of(
-			Trio.of(Ejercicio1::recursivaBigInteger, TipoAjuste.POLYNOMIALLOG, "FactorialRecursiva_BigInteger"), 
-			Trio.of(Ejercicio1::iterativaBigInteger, TipoAjuste.POLYNOMIALLOG, "FactorialIterativa_BigInteger")
-			);
-
-	private static List<Trio<Function<Integer, Number>, TipoAjuste, String>> metodosDouble = List.of(
-			Trio.of(Ejercicio1::recursivaDouble, TipoAjuste.POLYNOMIALLOG, "FactorialRecursiva_Double"), 
-			Trio.of(Ejercicio1::iterativaDouble, TipoAjuste.POLYNOMIALLOG, "FactorialIterativa_Double")
-			);
-
-	private static <E> void generaFicherosTiempoEjecucionMetodos(List<Trio<Function<E, Number>, TipoAjuste, String>> metodos) {
-		for (int i=0; i<metodos.size(); i++) { 
-			int numMax = nMax; 
-			Boolean flagExp = i==0 ? true : false;
-
-			String ficheroSalida = String.format("ficheros/Tiempos%s.csv", metodos.get(i).third());
-
-			testTiemposEjecucion(nMin, numMax, metodos.get(i).first(), ficheroSalida, flagExp);
-		}
-	}
-
-	public static void generaFicherosTiempoEjecucion() {
-		generaFicherosTiempoEjecucionMetodos(metodosBigInteger);
-		generaFicherosTiempoEjecucionMetodos(metodosDouble);
-	}
-
-	public static <E> void muestraGraficasMetodos(List<Trio<Function<E, Number>, TipoAjuste, String>> metodos, List<String> ficherosSalida, List<String> labels) {
-		for (int i=0; i<metodos.size(); i++) { 
-			String ficheroSalida = String.format("ficheros/Tiempos%s.csv",
-					metodos.get(i).third());
-			ficherosSalida.add(ficheroSalida);
-			String label = metodos.get(i).third();
-			System.out.println(label);
-
-			TipoAjuste tipoAjuste = metodos.get(i).second();
-			GraficosAjuste.show(ficheroSalida, tipoAjuste, label);	
-
-			// Obtener ajusteString para mostrarlo en gráfica combinada
-			Pair<Function<Double, Double>, String> parCurve = GraficosAjuste.fitCurve(
-					DataCurveFitting.points(ficheroSalida), tipoAjuste);
-			String ajusteString = parCurve.second();
-			labels.add(String.format("%s     %s", label, ajusteString));
-		}
-	}
-
-	public static void muestraGraficas() {
-		List<String> ficherosSalida = new ArrayList<>();
-		List<String> labels = new ArrayList<>();
-
-		muestraGraficasMetodos(metodosBigInteger, ficherosSalida, labels);
-		muestraGraficasMetodos(metodosDouble, ficherosSalida, labels);
-
-		GraficosAjuste.showCombined("Factorial", ficherosSalida, labels);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <E> void testTiemposEjecucion(Integer nMin, Integer nMax, Function<E, Number> funcionFib, String ficheroTiempos, Boolean flagExp) {
-		Map<Problema, Double> tiempos = new HashMap<Problema,Double>();
-		Integer nMed = flagExp ? 1 : numMediciones; 
-		for (int iter=0; iter<nMed; iter++) {
-			for (int i=0; i<numSizes; i++) {
-				Double r = Double.valueOf(nMax-nMin)/(numSizes-1);
-				Integer tam = (Integer.MAX_VALUE/nMax > i) 
-						? nMin + i*(nMax-nMin)/(numSizes-1)
-								: nMin + (int) (r*i) ;
-				Problema p = Problema.of(tam);
-				System.out.println(tam);
-				warmup(funcionFib, 10);
-				Integer nIter = flagExp ? numIter/(i+1) : numIter;
-				Number[] res = new Number[nIter];
-				Long t0 = System.nanoTime();
-				for (int z=0; z<nIter; z++) {
-					res[z] = funcionFib.apply((E) tam);
-				}
-				Long t1 = System.nanoTime();
-				actualizaTiempos(tiempos, p, Double.valueOf(t1-t0)/nIter);
-			}
-		}
-
-		Resultados.toFile(tiempos.entrySet().stream()
-				.map(x -> TResultD.of(x.getKey().tam(), x.getValue()))
-				.map(TResultD::toString),
-				ficheroTiempos, true);
-	}
-
-	private static void actualizaTiempos(Map<Problema, Double> tiempos, Problema p, double d) {
-		if (!tiempos.containsKey(p)) {
-			tiempos.put(p, d);
-		} else if (tiempos.get(p) > d) {
-			tiempos.put(p, d);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <E> BigInteger warmup(Function<E, Number> fib, Integer n) {
-		BigInteger res=BigInteger.ZERO;
-		BigInteger z = BigInteger.ZERO; 
-		for (int i=0; i<numIterWarmup; i++) {
-			if (fib.apply((E) n).equals(z))
-				z.add(BigInteger.ONE);
-		}
-		res = z.equals(BigInteger.ONE)? z.add(BigInteger.ONE):z;
-		return res;
-	}
-
-	record TResultD(Integer tam, Double t) {
-		public static TResultD of(Integer tam, Double t){
-			return new TResultD(tam, t);
-		}
-
-		public String toString() {
-			return String.format("%d,%.0f", tam, t);
-		}
-	}
-
-	record Problema(Integer tam) {
-		public static Problema of(Integer tam){
-			return new Problema(tam);
-		}
+		new TestEjercicio1().test();
 	}
 }

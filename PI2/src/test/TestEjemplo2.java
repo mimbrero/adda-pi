@@ -13,9 +13,9 @@ import ejemplos.Ejemplo2;
 import us.lsi.common.Pair;
 import us.lsi.common.Trio;
 import us.lsi.curvefitting.DataCurveFitting;
-import util.GraficosAjuste;
-import util.Resultados;
-import util.TipoAjuste;
+import util.curvefitting.GraficosAjuste;
+import util.curvefitting.Resultados;
+import util.curvefitting.TipoAjuste;
 
 public class TestEjemplo2 {
 	

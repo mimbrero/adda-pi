@@ -1,4 +1,4 @@
-package util;
+package util.curvefitting;
 
 public enum TipoAjuste {
 	LINEAL, // a + n*b

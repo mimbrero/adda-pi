@@ -4,8 +4,8 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.MatrixFibBigInteger;
-import util.MatrixFibDouble;
+import util.curvefitting.MatrixFibBigInteger;
+import util.curvefitting.MatrixFibDouble;
 
 public class Ejemplo2 {
 	/*
