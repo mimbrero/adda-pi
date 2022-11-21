@@ -12,6 +12,8 @@ public class TestEjercicio1 extends BenchmarkTest {
 	private static final String ITERATIVA_BIG_INTEGER = "iterativa-biginteger";
 	private static final String RECURSIVA_DOUBLE = "recursiva-double";
 	private static final String ITERATIVA_DOUBLE = "iterativa-double";
+	
+	private Ejercicio1 ejercicio1 = new Ejercicio1();
 
 	public TestEjercicio1() {
 		super("Factorial", "ficheros/tiempos-factorial-%s.csv");
@@ -24,10 +26,10 @@ public class TestEjercicio1 extends BenchmarkTest {
 	}
 
 	private void generateBenchmarks() {
-		this.generateBenchmark(size -> Ejercicio1.recursivaBigInteger(size), RECURSIVA_BIG_INTEGER, 2, 5000, 333, 1000, 50);
-		this.generateBenchmark(size -> Ejercicio1.iterativaBigInteger(size), ITERATIVA_BIG_INTEGER, 2, 5000, 333, 1000, 50);
-		this.generateBenchmark(size -> Ejercicio1.recursivaDouble(size), RECURSIVA_DOUBLE, 2, 5000, 333, 10000, 10000);
-		this.generateBenchmark(size -> Ejercicio1.iterativaDouble(size), ITERATIVA_DOUBLE, 2, 5000, 333, 10000, 10000);
+		this.generateBenchmark(ejercicio1::recursivaBigInteger, RECURSIVA_BIG_INTEGER, 2, 5000, 333, 1000, 50);
+		this.generateBenchmark(ejercicio1::iterativaBigInteger, ITERATIVA_BIG_INTEGER, 2, 5000, 333, 1000, 50);
+		this.generateBenchmark(ejercicio1::recursivaDouble, RECURSIVA_DOUBLE, 2, 5000, 333, 10000, 10000);
+		this.generateBenchmark(ejercicio1::iterativaDouble, ITERATIVA_DOUBLE, 2, 5000, 333, 10000, 10000);
 	}
 
 	private void generateGraphs() {

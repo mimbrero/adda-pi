@@ -4,14 +4,14 @@ import java.math.BigInteger;
 
 public class Ejercicio1 {
 
-	public static BigInteger recursivaBigInteger(Integer n) {
+	public BigInteger recursivaBigInteger(Integer n) {
 		if (n < 2)
 			return BigInteger.ONE;
 
 		return recursivaBigInteger(n - 1).multiply(BigInteger.valueOf(n));
 	}
 
-	public static BigInteger iterativaBigInteger(Integer n) {
+	public BigInteger iterativaBigInteger(Integer n) {
 		BigInteger ac = n > 1 ? BigInteger.valueOf(n) : BigInteger.ONE;
 
 		while (n > 1) {
@@ -21,14 +21,14 @@ public class Ejercicio1 {
 		return ac;
 	}
 
-	public static Double recursivaDouble(Integer n) {
+	public Double recursivaDouble(Integer n) {
 		if (n < 2)
 			return 1D;
 
 		return n * recursivaDouble(n - 1);
 	}
 
-	public static Double iterativaDouble(Integer n) {
+	public Double iterativaDouble(Integer n) {
 		Double ac = n > 1 ? n : 1D;
 
 		while (n > 1) {
