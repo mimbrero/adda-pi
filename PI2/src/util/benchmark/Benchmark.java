@@ -38,7 +38,7 @@ public class Benchmark implements Runnable {
 	@Override
 	public void run() {
 		for (int size = minSize; size < maxSize; size += sizeIncrement) {
-			System.out.println(size);
+			System.out.println("Running algorithm with size " + size + "...");
 			double time = this.run(size);
 			this.times.put(size, time);
 		}

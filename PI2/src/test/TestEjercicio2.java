@@ -10,6 +10,7 @@ import util.test.BenchmarkTest;
 
 public class TestEjercicio2 extends BenchmarkTest {
 
+	private final RandomListPopulator listPopulator = new RandomListPopulator();
 	private final Ejercicio2 ejercicio2 = new Ejercicio2();
 	private final Integer[] thresholds = {4, 25, 100, 500};
 
@@ -24,19 +25,20 @@ public class TestEjercicio2 extends BenchmarkTest {
 	}
 
 	private void generateBenchmarks() {
-		RandomListPopulator populator = new RandomListPopulator();
+		printSeparator("BENCHMARKS");
 
-		for (Integer threshold : this.thresholds) {
+		for (Integer threshold : this.thresholds)
 			this.generateBenchmark(
-					size -> ejercicio2.quickSort(populator.generate(size), threshold), 
-					threshold.toString(), 50, 50000, 500, 5, 30);
-		}
+					size -> ejercicio2.quickSort(listPopulator.generate(size), threshold), 
+					threshold.toString(), 50, 50000, 500, 5, 30
+			);
 	}
 
 	private void generateGraphs() {
-		for (Integer threshold : this.thresholds) {
+		printSeparator("RESULTS");
+		
+		for (Integer threshold : this.thresholds)
 			this.generateGraph(threshold.toString(), TipoAjuste.NLOGN_0);
-		}
 
 		List<String> fileNames = Arrays.stream(this.thresholds).map(threshold -> threshold.toString()).toList();
 		this.generateCombinedGraph(fileNames);

@@ -19,9 +19,13 @@ public abstract class BenchmarkTest extends Test {
 		this.pathFormat = pathFormat;
 	}
 
-	protected void generateBenchmark(Consumer<Integer> implementation, String fileName,
-			int minSize, int maxSize, int sizeIncrement, int warmupIterations, int iterations) {
+	protected void generateBenchmark(
+			Consumer<Integer> implementation, String fileName,
+			int minSize, int maxSize, int sizeIncrement, int warmupIterations, int iterations
+	) {
 		Benchmark benchmark = new Benchmark(implementation, minSize, maxSize, sizeIncrement, warmupIterations, iterations);
+		
+		printSeparator(fileName);
 		benchmark.run();
 
 		try {
@@ -32,10 +36,13 @@ public abstract class BenchmarkTest extends Test {
 	}
 
 	protected void generateGraph(String fileName, TipoAjuste tipoAjuste) {
+		printSeparator(fileName);
 		GraficosAjuste.show(pathFormat.formatted(fileName), tipoAjuste, fileName);
 	}
 
 	protected void generateCombinedGraph(List<String> names) {
+		printSeparator("FINAL RESULTS");
+		
 		GraficosAjuste.showCombined(
 				name, 
 				names.stream()
