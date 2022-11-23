@@ -21,9 +21,9 @@ public abstract class BenchmarkTest extends Test {
 
 	protected void generateBenchmark(
 			Consumer<Integer> implementation, String fileName,
-			int minSize, int maxSize, int sizeIncrement, int warmupIterations, int iterations
+			int minSize, int maxSize, int sizeIncrement, int measures, int warmupIterations, int iterations
 	) {
-		Benchmark benchmark = new Benchmark(implementation, minSize, maxSize, sizeIncrement, warmupIterations, iterations);
+		Benchmark benchmark = new Benchmark(implementation, minSize, maxSize, sizeIncrement, measures, warmupIterations, iterations);
 		
 		printSeparator(fileName);
 		benchmark.run();

@@ -30,7 +30,7 @@ public class TestEjercicio2 extends BenchmarkTest {
 		for (Integer threshold : this.thresholds)
 			this.generateBenchmark(
 					size -> ejercicio2.quickSort(listPopulator.generate(size), threshold), 
-					threshold.toString(), 50, 50000, 500, 5, 30
+					threshold.toString(), 50, 50000, 500, 1, 5, 30
 			);
 	}
 

@@ -28,10 +28,10 @@ public class TestEjercicio1 extends BenchmarkTest {
 	private void generateBenchmarks() {
 		printSeparator("BENCHMARKS");
 
-		this.generateBenchmark(ejercicio1::recursivaBigInteger, RECURSIVA_BIG_INTEGER, 2, 5000, 333, 1000, 50);
-		this.generateBenchmark(ejercicio1::iterativaBigInteger, ITERATIVA_BIG_INTEGER, 2, 5000, 333, 1000, 50);
-		this.generateBenchmark(ejercicio1::recursivaDouble, RECURSIVA_DOUBLE, 2, 5000, 333, 10000, 10000);
-		this.generateBenchmark(ejercicio1::iterativaDouble, ITERATIVA_DOUBLE, 2, 5000, 333, 10000, 10000);
+		this.generateBenchmark(ejercicio1::recursivaBigInteger, RECURSIVA_BIG_INTEGER, 2, 5000, 333, 1, 1000, 50);
+		this.generateBenchmark(ejercicio1::iterativaBigInteger, ITERATIVA_BIG_INTEGER, 2, 5000, 333, 1, 1000, 50);
+		this.generateBenchmark(ejercicio1::recursivaDouble, RECURSIVA_DOUBLE, 2, 5000, 333, 1, 10000, 10000);
+		this.generateBenchmark(ejercicio1::iterativaDouble, ITERATIVA_DOUBLE, 2, 5000, 333, 1, 10000, 10000);
 	}
 
 	private void generateGraphs() {

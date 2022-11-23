@@ -20,28 +20,33 @@ public class Benchmark implements Runnable {
 	private final int maxSize;
 	private final int sizeIncrement;
 
+	private final int measures;
 	private final int warmupIterations;
 	private final int iterations;
 
 	private final Map<Integer, Double> times = new HashMap<>();
 
-	public Benchmark(Consumer<Integer> algorithm, int minSize, int maxSize, int sizeIncrement, int warmupIterations,
-			int iterations) {
+	public Benchmark(Consumer<Integer> algorithm, int minSize, int maxSize, int sizeIncrement,
+			int measures, int warmupIterations, int iterations) {
 		this.algorithm = algorithm;
 		this.minSize = minSize;
 		this.maxSize = maxSize;
 		this.sizeIncrement = sizeIncrement;
+		this.measures = measures;
 		this.warmupIterations = warmupIterations;
 		this.iterations = iterations;
 	}
 
 	@Override
 	public void run() {
-		for (int size = minSize; size < maxSize; size += sizeIncrement) {
-			System.out.println("Running algorithm with size " + size + "...");
-			double time = this.run(size);
-			this.times.put(size, time);
-		}
+		for (int i = 0; i < measures; i++)
+			for (int size = minSize; size < maxSize; size += sizeIncrement) {
+				System.out.println("Running algorithm with size " + size + "...");
+				double time = this.run(size);
+				
+				double lastTime = this.times.getOrDefault(size, time);
+				this.times.put(size, Math.min(time, lastTime));
+			}
 	}
 
 	private double run(int size) {
