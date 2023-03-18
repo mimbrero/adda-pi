@@ -2,9 +2,10 @@ package ejercicios.ejercicio1;
 
 import util.parse.ParameterLookup;
 
-public record CoffeeType(Integer quantity) {
-	
+public record CoffeeType(String id, Integer quantity) {
+
 	public static CoffeeType parse(String line) {
-		return new CoffeeType(ParameterLookup.lookup(line, "kgdisponibles", Integer::parseInt));
+		Integer quantity = ParameterLookup.lookup(line, "kgdisponibles", Integer::parseInt);
+		return new CoffeeType(line.split(":")[0], quantity);
 	}
 }
