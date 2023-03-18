@@ -1,0 +1,18 @@
+head section
+Integer getTypesNumber()
+Integer getVarietiesNumber()
+Integer getVarietyProfit(Integer i)
+Integer getTypeQuantity(Integer j)
+Double getTypePercentage(Integer i, Integer j)
+
+Integer n = getTypesNumber()
+Integer m = getVarietiesNumber()
+
+goal section
+max sum(getVarietyProfit(i) x[i], i in 0 .. m)
+
+constraints section
+sum(getTypePercentage(i, j) x[i], i in 0 .. m) <= getTypeQuantity(j), j in 0 .. n
+
+int
+x[i], i in 0 .. m
