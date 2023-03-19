@@ -45,29 +45,35 @@ public class CoffeeData {
 		while (lineIterator.hasNext()) {
 			varieties.add(CoffeeVariety.parse(typesByName, lineIterator.next()));
 		}
-		
+
 		return new CoffeeData(types, varieties);
 	}
 
 	public Integer getTypesNumber() {
 		return this.types.size();
 	}
-	
+
 	public Integer getVarietiesNumber() {
 		return this.varieties.size();
 	}
-	
+
 	public Integer getVarietyProfit(Integer variety) {
 		return this.varieties.get(variety).profit();
 	}
-	
+
 	public Integer getTypeQuantity(Integer type) {
 		return this.types.get(type).quantity();
 	}
-	
+
 	public Double getTypePercentage(Integer variety, Integer typeIndex) {
 		CoffeeType type = this.types.get(typeIndex);
 		return this.varieties.get(variety).composition().getOrDefault(type, 0D);
+	}
+
+	public Double getMaxKg(Integer variety) {
+		return varieties.get(variety).composition().entrySet().stream()
+				.mapToDouble(entry -> entry.getKey().quantity() / entry.getValue())
+				.sum();
 	}
 
 	public List<CoffeeType> getTypes() {

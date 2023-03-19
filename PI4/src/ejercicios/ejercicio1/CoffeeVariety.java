@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import util.parse.ParameterLookup;
 
-public record CoffeeVariety(Integer profit, Map<CoffeeType, Double> composition) {
+public record CoffeeVariety(String id, Integer profit, Map<CoffeeType, Double> composition) {
 
 	/**
 	 * Parsea una línea de un archivo del ejercicio 1.
@@ -23,6 +23,6 @@ public record CoffeeVariety(Integer profit, Map<CoffeeType, Double> composition)
 			.map(item -> item.split(":"))
 			.collect(Collectors.toMap(item -> typesByName.get(item[0]), item -> Double.parseDouble(item[1])));
 
-		return new CoffeeVariety(profit, composition);
+		return new CoffeeVariety(line.split(" -> ")[0], profit, composition);
 	}
 }
