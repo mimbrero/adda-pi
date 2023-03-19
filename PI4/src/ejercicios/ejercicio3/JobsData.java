@@ -73,4 +73,8 @@ public class JobsData {
 	public Integer getJobDaysForSpeciality(Integer job, Integer speciality) {
 		return this.jobs.get(job).getDaysNeededForSpeciality(speciality);
 	}
+	
+	public List<Researcher> getResearchers() {
+		return this.researchers;
+	}
 }
