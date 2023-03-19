@@ -1,0 +1,25 @@
+head section
+Integer getResearchersNumber()
+Integer getJobsNumber()
+Integer getSpecialitiesNumber()
+Integer getResearcherCapacity(Integer i)
+Integer isSpecialist(Integer i, Integer s)
+Integer getQuality(Integer i)
+Integer getJobDaysForSpeciality(Integer j, Integer s)
+
+Integer n = getResearchersNumber()
+Integer m = getJobsNumber()
+Integer sp = getSpecialitiesNumber()
+
+goal section
+max sum(getQuality(j) x[j], j in 0 .. m)
+
+constraints section
+sum(r[i,j], j in 0 .. m) <= getResearcherCapacity(i), i in 0 .. n
+sum(isSpecialist(i, s) r[i,j], i in 0 .. n) - getJobDaysForSpeciality(j, s) x[j] = 0, s in 0 .. sp, j in 0 .. m
+
+bin
+x[j], j in 0 .. m
+
+int
+r[i,j], i in 0 .. n, j in 0 .. m
