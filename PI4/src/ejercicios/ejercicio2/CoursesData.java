@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import util.parse.ParameterLookup;
 
@@ -30,8 +31,9 @@ public class CoursesData {
 		List<Course> courses = new ArrayList<>();
 		
 		// por cada línea restante del archivo
+		int i = 0;
 		while (lineIterator.hasNext()) {
-			courses.add(Course.parse(lineIterator.next()));
+			courses.add(Course.parse("S" + (i++), lineIterator.next()));
 		}
 
 		return new CoursesData(maxCenters, courses);
@@ -66,10 +68,18 @@ public class CoursesData {
 	public Integer getCourseCenter(Integer course) {
 		return this.courses.get(course).center();
 	}
+	
+	public Set<Integer> getCourseTopics(Integer course) {
+		return this.courses.get(course).topics();
+	}
 
 	public Integer isTopicInCourse(Integer topic, Integer course) {
 		// j + 1 porque en los datos de entrada empiezan por 1 pero el modelo
 		// está creado con las temáticas empezando en 0
 		return this.courses.get(course).topics().contains(topic + 1) ? 1 : 0;
+	}
+	
+	public Course getCourse(Integer index) {
+		return this.courses.get(index);
 	}
 }
