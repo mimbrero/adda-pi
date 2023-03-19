@@ -27,7 +27,9 @@ public class CoffeeData {
 				.iterator();
 
 		List<CoffeeType> types = new ArrayList<>();
-		Map<String, CoffeeType> typesByName = new HashMap<>();
+		Map<String, CoffeeType> typesByName = new HashMap<>(); // necesario para obtener luego las variedades
+
+		// por cada línea del archivo hasta que llegue a una línea que sea // VARIEDADES
 		while (lineIterator.hasNext()) {
 			String line = lineIterator.next();
 			if (line.equals("// VARIEDADES"))
@@ -35,10 +37,11 @@ public class CoffeeData {
 
 			CoffeeType type = CoffeeType.parse(line);
 			types.add(type);
-			typesByName.put(line.split(":")[0], type);
+			typesByName.put(type.id(), type);
 		}
 
 		List<CoffeeVariety> varieties = new ArrayList<>();
+		// por cada línea restante hasta el final
 		while (lineIterator.hasNext()) {
 			varieties.add(CoffeeVariety.parse(typesByName, lineIterator.next()));
 		}
@@ -54,17 +57,17 @@ public class CoffeeData {
 		return this.varieties.size();
 	}
 	
-	public Integer getVarietyProfit(Integer i) {
-		return this.varieties.get(i).profit();
+	public Integer getVarietyProfit(Integer variety) {
+		return this.varieties.get(variety).profit();
 	}
 	
-	public Integer getTypeQuantity(Integer j) {
-		return this.types.get(j).quantity();
+	public Integer getTypeQuantity(Integer type) {
+		return this.types.get(type).quantity();
 	}
 	
-	public Double getTypePercentage(Integer i, Integer j) {
-		CoffeeType type = this.types.get(j);
-		return this.varieties.get(i).composition().getOrDefault(type, 0D);
+	public Double getTypePercentage(Integer variety, Integer typeIndex) {
+		CoffeeType type = this.types.get(typeIndex);
+		return this.varieties.get(variety).composition().getOrDefault(type, 0D);
 	}
 
 	public List<CoffeeType> getTypes() {

@@ -25,8 +25,11 @@ public class CoursesData {
 				.map(String::strip)
 				.iterator();
 
+		// la primera línea del archivo debería ser la que contiene Max_Centros
 		Integer maxCenters = ParameterLookup.lookup(lineIterator.next(), "Max_Centros", Integer::valueOf);
 		List<Course> courses = new ArrayList<>();
+		
+		// por cada línea restante del archivo
 		while (lineIterator.hasNext()) {
 			courses.add(Course.parse(lineIterator.next()));
 		}
@@ -45,8 +48,8 @@ public class CoursesData {
 	public Integer getTopicsNumber() {
 		return (int) this.courses.stream()
 				.flatMap(course -> course.topics().stream())
-				.mapToInt(topic -> topic)
-				.max().getAsInt();
+				.distinct()
+				.count();
 	}
 
 	public Integer getCentersNumber() {
@@ -56,17 +59,17 @@ public class CoursesData {
 				.count();
 	}
 
-	public Double getCoursePrice(Integer i) {
-		return this.courses.get(i).price();
+	public Double getCoursePrice(Integer course) {
+		return this.courses.get(course).price();
 	}
 
-	public Integer getCourseCenter(Integer i) {
-		return this.courses.get(i).center();
+	public Integer getCourseCenter(Integer course) {
+		return this.courses.get(course).center();
 	}
 
-	public Integer isTopicInCourse(Integer j, Integer i) {
+	public Integer isTopicInCourse(Integer topic, Integer course) {
 		// j + 1 porque en los datos de entrada empiezan por 1 pero el modelo
 		// está creado con las temáticas empezando en 0
-		return this.courses.get(i).topics().contains(j + 1) ? 1 : 0;
+		return this.courses.get(course).topics().contains(topic + 1) ? 1 : 0;
 	}
 }
